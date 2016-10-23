@@ -218,7 +218,7 @@ $(function () {
     };
   }
 
-  //循环取材料
+  //循环取材料的
   function getFiles(a,json){
     var m=0;
     title.titles.file = [];
