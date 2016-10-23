@@ -237,7 +237,6 @@ $(function () {
       }
       m++;
     }
-    //console.log(title.questionContent);
   }
 
 
