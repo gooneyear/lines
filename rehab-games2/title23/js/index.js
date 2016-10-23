@@ -283,6 +283,7 @@ $(function () {
         title.axesNum += 1;
       }      
     }
+    // 如果坐标非空，且两边坐标数相等，则连线
     var svg = document.getElementById("svgArea");
     if (title.startAxes.length != 0 && title.startAxes.length == title.endAxes.length) {
       svg.innerHTML += "<line x1='" + title.startAxes[title.axesNum].x1 + "' y1='" + title.startAxes[title.axesNum].y1 + "' x2='" + title.endAxes[title.axesNum].x2 + "' y2='" + title.endAxes[title.axesNum].y2 + "' id='line"+title.axesNum+"' style='stroke:black;stroke-width:2'/>";
@@ -302,7 +303,7 @@ $(function () {
     var srcNum = 0;
     var text = "";
     var src  = "";
-    
+    // 根据坐标值来判断图文索引
     for (var i=0; i<$("line").length; i++) {
       switch ($("#line"+i).attr("x1")) {
         case "214":
@@ -327,6 +328,7 @@ $(function () {
           srcNum = 2
           break;
       }
+      // 根据索引值，在json数组中查找对应的值
       src = $("#pic"+srcNum).attr("src");
       for (var j=0; j<subNum; j++){
         if (title.titles.file[j].word == text) {
@@ -352,6 +354,7 @@ $(function () {
 
   }
 
+  // 获取点击图片的事件
   $("#images").on('click','.clickPic',function(){
     if ($("svg line").length == $("#images img").length) {
       return true;
