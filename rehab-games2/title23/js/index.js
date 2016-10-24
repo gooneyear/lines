@@ -54,9 +54,9 @@ $(function () {
     },
     
       // 获取点击事件
-    startAxes : [],// 文字坐标
+    startAxes : [], // 文字坐标
     endAxes   : [], // 图片坐标
-    axesNum   : -1
+    axesNum   : -1  // 已存储的坐标数
   };
   var timerr1;
   var title1_number = 0;
