@@ -49,19 +49,21 @@ $(function () {
       "file"  : [],
       "level" : "1"
     },
-    titles:{           // 获取json数据，文字图片等
+    titles:{              // 获取json数据，文字图片等
       "file"  : [],
       "level" : "1"
     },
-    startAxes : [],    // 文字坐标
-    endAxes   : [],    // 图片坐标
-    axesNum   : -1     // 已存储的坐标数
+    startAxes : [],       // 文字坐标
+    endAxes   : [],       // 图片坐标
+    axesNum   : -1        // 已存储的坐标数
   };
 
-  var preTimer;        // 倒计时开启时间
-  var leftTime=0;      // 进度条剩余时间
-  var timerJd;         // 进度条时间
-  var rightLines=0;    // 每题中的正确连线数
+  var preTimer;           // 倒计时开启时间
+  var leftTime=0;         // 进度条剩余时间
+  var timerJd;            // 进度条时间
+  var rightLines=0;       // 每题中的正确连线数
+  var getTextNumArr = []; // 存储已连线的选项编号
+  var getSrcNumArr  = [];
 
   //初始化界面；
   $("#jindutiao,#jindutiao_div").css("width",$("#h1_div").text().length*title.h1_size);
@@ -141,6 +143,8 @@ $(function () {
     title.startAxes = [];
     title.endAxes   = [];
     title.axesNum   = -1;
+    getTextNumArr   = [];
+    getSrcNumArr    = [];
 
     // 重新获取内容，随机显示
     title.titles.file.sort(randomsort);
@@ -161,18 +165,50 @@ $(function () {
 
     // 开始计时
     preTimer=setTimeout(function(){
+      console.log()
       preTimer=jindutiaoFunction(title.fyTime,title.h1_size,function amd(){
         showNext();
         if(title.flag==true){
           title.L=2;
           title.reactTime=title.fyTime-leftTime;
+        }        
+
+        // 计时结束时，判断结果并给出样式
+        judgeResult();
+        console.log(title.reactTime +"========="+ title.fyTime+"***"+ leftTime);
+        var getFlag1 = true; 
+        var getFlag2 = true;
+        console.log(leftTime+"===========");
+        if (leftTime <= 1) {
+          for (var x=0; x<title.level+1; x++){     
+            for (var y=0; y<getTextNumArr.length; y++){        
+              if (getTextNumArr[y] == x) {
+                getFlag1 = false;
+              } else {
+                getFlag1 = true;
+              }
+              if (getSrcNumArr[y] == x) {
+                getFlag2 = false;
+              } else {
+                getFlag2 = true;
+              }
+            }
+            if (getFlag1) {
+              $("#word"+x).removeClass("divBorder");
+              $("#word"+x).addClass("errorStyle");
+            }
+            if (getFlag2) {
+              $("#pic"+x).removeClass("divBorder");
+              $("#pic"+x).addClass("errorStyle");
+            }            
+          }
         }
       });
     },500);
-    console.log("=========="+preTimer);
+    
     title.flag=true;
     rightLines=0;
-    title.fyTime=20;
+    title.fyTime = 20 + (title.level-1)*10;
     title.errorTitle={
       file:[],
       level:""
@@ -250,9 +286,9 @@ $(function () {
     if ($("line").length == title.level+1){
       judgeResult();
     }
-    console.log(title.startAxes);
   });
 
+  
   // 判断连线是否正确
   function judgeResult(){
     var subNum = title.titles.file.length;
@@ -334,6 +370,8 @@ $(function () {
           }
         }
       }
+      getTextNumArr.push(textNum);
+      getSrcNumArr.push(srcNum);
     }
     // 如果样式重置完毕，则添加按钮
     if (rightLines == subNum) {
@@ -352,10 +390,12 @@ $(function () {
         tongze7(title,3);
       }
     }
+
     $("#totalPoints").html(title.totalPoints);
     showNext();
 
     console.log("项目标识："+title.flag);
+
   }
 
   // 获取点击图片的事件
