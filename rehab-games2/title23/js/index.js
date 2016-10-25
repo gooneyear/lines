@@ -17,7 +17,7 @@ $(function () {
     missNum:0,
     startLevel:1,
     avgCorrectTime:0,   // 正确答题平均时长
-    time:"300",
+    time:"300",         //
     reactTime:0,        // 用户反应时长
     answer:[],          // ??????有用保留
     specs:{
@@ -30,8 +30,8 @@ $(function () {
     totalNumber:0,          //训练的总题数
     meanFyTime:0,           //平均答题时间
     rightDate:0,            //正确率
-    todayPoints:0,          //今日得分
-    yesterdayPoints:0,      //昨日得分
+    todayPoints:0,          //本次得分
+    yesterdayPoints:0,      //上次得分
     totalTimes:0,           //总时间
     L:0,
     matters:[],
@@ -43,28 +43,25 @@ $(function () {
     totalPoints:0,        // 历史以来的总分
     level:1,              // 当前等级
     bestLevel:3,          // 最高等级
-    fyTime:20,            //
+    fyTime:20,            // 题目时长(S)
     titleTimes:[],
     errorTitle:{
       "file"  : [],
       "level" : "1"
     },
-
-    titles:{         // 获取json数据，文字图片等
+    titles:{           // 获取json数据，文字图片等
       "file"  : [],
       "level" : "1"
     },
-    startAxes : [],  // 文字坐标
-    endAxes   : [],  // 图片坐标
-    axesNum   : -1   // 已存储的坐标数
+    startAxes : [],    // 文字坐标
+    endAxes   : [],    // 图片坐标
+    axesNum   : -1     // 已存储的坐标数
   };
 
-  var timerr1;
-  var fytime=0;
-  var timerJd;
-  var rightLines=0;   // 每题中的正确连线数
-  var audioNum=0;
-  var audioNum1=0;
+  var preTimer;        // 倒计时开启时间
+  var leftTime=0;      // 进度条剩余时间
+  var timerJd;         // 进度条时间
+  var rightLines=0;    // 每题中的正确连线数
 
   //初始化界面；
   $("#jindutiao,#jindutiao_div").css("width",$("#h1_div").text().length*title.h1_size);
@@ -90,7 +87,7 @@ $(function () {
 
   //下一题按钮
   $("#next").click(function () {
-    title.reactTime=title.fyTime-fytime;
+    title.reactTime=title.fyTime-leftTime;
     api.savaQuestionFunction(title);
     title.answer=[];
     // 连续正确数目大于3说明升级了，连续正确的数目要清零。错误数也一样
@@ -105,8 +102,7 @@ $(function () {
 
     $("#now_level").html(title.level);
     // 计算当前阶段的得分情况
-    countFunction(title,fytime);
-
+    countFunction(title,leftTime);
     // 判断训练是否结束
     if(title.gameOver){
       $("#game_over").show();
@@ -117,13 +113,13 @@ $(function () {
       $("#rightDate").html(title.rightDate);
       api.savaTaskFuction(title);
     } else {
-      title.totalNumber ++;
       $.getJSON("json/title23.json", function (json) {
         json.sort(randomsort);
         getFiles(title.level,json);
         rechargeSite();
       });
     }
+    console.log(title.totalNumber+"/"+title.rightNumber);
   });
 
   // 解冻'下一题'按钮
@@ -134,7 +130,6 @@ $(function () {
 
   //重新生成页面
   function rechargeSite(){
-    //$("#now_level").html(title.level);
     $("#jindutiao,#jindutiao_div").css("width",$("#h1_div").text().length*title.h1_size);
 
     // 清空页面中的原有内容
@@ -165,20 +160,19 @@ $(function () {
     $("#images img").addClass('fileStyle');
 
     // 开始计时
-    timerr1=setTimeout(function(){
-      timerr1=jindutiaoFunction(title.fyTime,title.h1_size,function amd(){
+    preTimer=setTimeout(function(){
+      preTimer=jindutiaoFunction(title.fyTime,title.h1_size,function amd(){
         showNext();
         if(title.flag==true){
           title.L=2;
-          title.reactTime=title.fyTime-fytime;
+          title.reactTime=title.fyTime-leftTime;
         }
       });
     },500);
+    console.log("=========="+preTimer);
     title.flag=true;
     rightLines=0;
-    title.fyTime=10;
-    audioNum=0;
-    audioNum1=0;
+    title.fyTime=20;
     title.errorTitle={
       file:[],
       level:""
@@ -331,10 +325,12 @@ $(function () {
             $("#word"+textNum+",#pic"+srcNum).removeClass("divBorder");
             $("#word"+textNum+",#pic"+srcNum).addClass("rightStyle");
             rightLines += 1;
+            clearInterval(timerJd);
           } else {
             $("#line"+i).attr("style","stroke:red;stroke-width:3");
             $("#word"+textNum+",#pic"+srcNum).removeClass("divBorder");
             $("#word"+textNum+",#pic"+srcNum).addClass("errorStyle");
+            clearInterval(timerJd);
           }
         }
       }
@@ -416,24 +412,24 @@ $(function () {
 
   //任务进度条
   function jindutiaoFunction(times,nums,aa){
-      $("#jindutiao,#jindutiao_div").css("width",$("#h1_div").text().length*nums);
-      var width=parseInt($("#jindutiao").css("width"));
-      var widths=width/times;
-      fytime=times;
-      timerJd=setInterval(function(){
-          if(times>0){
-              times--;
-          }
-          width-=widths;
-          $("#jindutiao").css("width",width);
-          if(width<=0){
-              clearInterval(timerJd);
-              {
-                  aa()
-              }
-          }
-          fytime=times;
-      },1000);
+    $("#jindutiao,#jindutiao_div").css("width",$("#h1_div").text().length*nums);
+    var width=parseInt($("#jindutiao").css("width"));
+    var widths=width/times;
+    leftTime=times;
+    timerJd=setInterval(function(){
+      if(times>0){
+          times--;
+      }
+      width -= widths;
+      $("#jindutiao").css("width",width);
+      if(width<=0){
+        clearInterval(timerJd);
+        {
+          aa()
+        }
+      }
+      leftTime=times;
+    },1000);
   }
 
 });

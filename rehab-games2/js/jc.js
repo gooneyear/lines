@@ -2,19 +2,19 @@ function countFunction(title,fytime){
   title.answer=[];
   title.totalNumber++;
   if(title.L==1){
-    if(title.reactTime==title.fyTime){
+    if(title.reactTime==title.fyTime) {
       title.reactTime=0;
     }
     title.avgCorrectTime+=title.reactTime;
     title.isCorrect="1";
     title.rightNumber++;
-  }else {
+  } else {
     title.isCorrect="0";
     title.matters.push(JSON.stringify(title.errorTitle));
   }
-  if(fytime==0){
+  if(fytime==0) {
     title.reactTime=0;
-  }else {
+  } else {
     title.reactTime=title.fyTime-fytime;
   }
   title.totalTimes+=title.reactTime;
@@ -23,99 +23,6 @@ function countFunction(title,fytime){
   title.meanFyTime=(title.totalTimes/title.totalNumber).toFixed(2)+"S";       //平均答题时间
 }
 
-function preload(array,rechargeSite){
-  var loader = new resLoader({
-    resources : array,
-    onStart : function(){},
-    onProgress : function(current, total){},
-    onComplete : function(){
-      rechargeSite();
-      $("#yindaoLv1,#goFight,#yindaoLv2").hide();
-      $("#title3_footer,#totalPointsDiv,#levelDiv,.title1_footer").show();
-    }
-  });
-  loader.start();
-}
-//播放并高亮显示
-function playHighFunction(audioId,text1Id,text2Id,text11Id,text22Id){
-  $(text1Id).css("border","blue 6px solid");
-  $(text2Id).css("border","#bebfc1 6px solid");
-  $(text11Id).css("color", "#ee9641");
-  $(text22Id).css("color", "#ee9641");
-  pauseNatherAudioFunction(audioId);
-  setTimeout(function(){
-    setTimeout(function(){
-      $(text11Id).css("color", "#57585e");
-      $(text22Id).css("color", "#fff");
-      $(text1Id).css("border","#bebfc1 6px solid");
-    },audioLength(audioId))
-  },500);
-}
-//播放并暂停播放其他按钮函数
-function pauseNatherAudioFunction(audioId){
-  $(audioId)[0].play();
-}
-function browserRedirect() {
-
-}
-function audioLength(audioId){
-  var num=0;
-  var ab=$(audioId)[0].duration*1000;
-  browserRedirect();
-  var sUserAgent = navigator.userAgent.toLowerCase();
-  var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
-  var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
-  var bIsMidp = sUserAgent.match(/midp/i) == "midp";
-  var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
-  var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
-  var bIsAndroid = sUserAgent.match(/android/i) == "android";
-  var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
-  var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
-  if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
-    num=ab+1200;
-  } else {
-    num=ab/2.2;
-  }
-
-  return num
-}
-
-function orient() {
-  var ua = navigator.userAgent.toLowerCase();
-  if (/iphone|ipad|ipod/.test(ua)) {
-    if (window.orientation == 0 || window.orientation == 180) {
-      $("body").attr("class", "portrait");
-      orientation = 'portrait';
-      $(".tishi").show();
-      return false;
-    }
-    else if (window.orientation == 90 || window.orientation == -90) {
-      $("body").attr("class", "landscape");
-      orientation = 'landscape';
-      $(".tishi").hide();
-      return false;
-    }
-  } else if (/android/.test(ua)) {
-    if (window.orientation == 0 || window.orientation == 180) {
-      $("body").attr("class", "portrait");
-      orientation = 'portrait';
-      $(".tishi").show();
-      return false;
-    }
-    else if (window.orientation == 90 || window.orientation == -90) {
-      $("body").attr("class", "landscape");
-      orientation = 'landscape';
-      $(".tishi").hide();
-      return false;
-    }
-  }
-}
-$(function(){
-  orient();
-});
-$(window).bind( 'orientationchange', function(e){
-  orient();
-});
 //任务时间函数
 function timeFunction(times,divID,aa){
   var time=times;
@@ -155,20 +62,13 @@ function timeFunction(times,divID,aa){
   },1000);
 }
 
+// 训练结果的页面展示
 $(function () {
   if ($(window).width() <= 1025 && $(window).height() <= 658) {
     $(".game_over_main").css("width", "70%");
     $(".game_over_message div").css("line-height", "150px")
   }
 });
-
-//清楚音频播放
-function pauseAudios(timerr1){
-  clearTimeout(timerr1);
-  $("audio").each(function(){
-    $(this)[0].pause();
-  })
-}
 
 //打乱数组
 function randomsort(a, b) {
@@ -182,13 +82,15 @@ function tongze7(title,tF,rightLines){
   if(tF==1){
     title.lianxuRightNumber ++;
     title.lianxuErrorNumber = 0;
+    title.rightNumber ++;
     // 单条线20分，辅助分4分
     title.totalPoints += rightLines*24;
-    // 升级加分规则
+    // 升级加分规则,保存当前级别
     if (title.lianxuRightNumber >= 3) {
       if (title.level < title.bestLevel) {
         title.totalPoints += (title.level+1)*20;
         title.level ++;
+        title.startLevel = title.level;
       }
     }
   } else if (tF==2){
@@ -199,6 +101,7 @@ function tongze7(title,tF,rightLines){
     if (title.lianxuErrorNumber >= 3) {
       if (title.level > 1) {
         title.level --;
+        title.startLevel = title.level;
       }
     }
   } else if (tF==3){
