@@ -79,26 +79,7 @@ function audioLength(audioId){
 
   return num
 }
-function HSfunction(title){
-  if(title.L==1){
-    title.isCorrect="1";
-    title.specs.help_score=4;
-    if(title.lianxuwutishiNumber>=3){
-      title.specs.award_score=5;
-      title.specs.award_reason="连续正确次数>=3";
-    }else {
-      title.specs.award_score=0;
-      title.specs.award_reason="连续正确次数<3";
-    }
-    title.score=title.specs.help_score+title.specs.award_score+10+(title.level-1)*10;
-  }else {
-    title.specs.award_score=0;
-    title.specs.help_score=0;
-    title.specs.award_reason="连续正确次数<3";
-    title.isCorrect="0";
-    title.score=0;
-  }
-}
+
 function orient() {
   var ua = navigator.userAgent.toLowerCase();
   if (/iphone|ipad|ipod/.test(ua)) {
@@ -128,18 +109,6 @@ function orient() {
       return false;
     }
   }
-  //if (window.orientation == 0 || window.orientation == 180) {
-  //    $("body").attr("class", "portrait");
-  //    orientation = 'portrait';
-  //    $(".tishi").show();
-  //    return false;
-  //}
-  //else if (window.orientation == 90 || window.orientation == -90) {
-  //    $("body").attr("class", "landscape");
-  //    orientation = 'landscape';
-  //    $(".tishi").hide();
-  //    return false;
-  //}
 }
 $(function(){
   orient();
@@ -185,17 +154,14 @@ function timeFunction(times,divID,aa){
     document.getElementById(divID).innerHTML=timer
   },1000);
 }
-//打乱数组
-function randomsort(a, b) {
-  return Math.random()>.5 ? -1 : 1;
-  //用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1
-}
+
 $(function () {
   if ($(window).width() <= 1025 && $(window).height() <= 658) {
     $(".game_over_main").css("width", "70%");
     $(".game_over_message div").css("line-height", "150px")
   }
 });
+
 //清楚音频播放
 function pauseAudios(timerr1){
   clearTimeout(timerr1);
@@ -204,24 +170,37 @@ function pauseAudios(timerr1){
   })
 }
 
+//打乱数组
+function randomsort(a, b) {
+  return Math.random()>.5 ? -1 : 1;
+  //用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1
+}
+
 //通则7
-function tongze7(title,tF,rightLines,level){
+function tongze7(title,tF,rightLines){
   //tF 1:正确、2:错误、3:重做;MM:正确或者错误情况下重做
   if(tF==1){
     title.lianxuRightNumber ++;
     title.lianxuErrorNumber = 0;
-    title.totalPoints += rightLines*20;
-    //辅助分
-    title.totalPoints += 4;
-    //级别分
-    if(level > 1){
-      title.totalPoints += (level+1)*20;
+    // 单条线20分，辅助分4分
+    title.totalPoints += rightLines*24;
+    // 升级加分规则
+    if (title.lianxuRightNumber >= 3) {
+      if (title.level < title.bestLevel) {
+        title.totalPoints += (title.level+1)*20;
+        title.level ++;
+      }
     }
   } else if (tF==2){
     title.lianxuErrorNumber++;
     title.lianxuRightNumber=0;
-    title.totalPoints += rightLines*20;
-    title.totalPoints += 4;
+    title.totalPoints += rightLines*24;
+    // 降级规则
+    if (title.lianxuErrorNumber >= 3) {
+      if (title.level > 1) {
+        title.level --;
+      }
+    }
   } else if (tF==3){
     title.flag=false;
   }

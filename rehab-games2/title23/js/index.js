@@ -2,6 +2,7 @@
  * Created by zhouxin on 2016/10/19.
  */
 $(function () {
+  // 需要文件间传递的参数，都放在title对象中
   var title = {
     unlock:false,
     health:false,
@@ -34,13 +35,13 @@ $(function () {
     totalTimes:0,           //总时间
     L:0,
     matters:[],
-    flag:true,
+    flag:true,            // 是否计分。false表示当前题目是重做的，不计分
     h1_size:parseInt($(".h1").css("font-size")),
     lianxuRightNumber:0,  // 连续正确题目数
     lianxuErrorNumber:0,  // 连续错误题目数
     flag1:true,
     totalPoints:0,        // 历史以来的总分
-    level:3,              // 当前等级
+    level:1,              // 当前等级
     bestLevel:3,          // 最高等级
     fyTime:20,            //
     titleTimes:[],
@@ -59,7 +60,6 @@ $(function () {
   };
 
   var timerr1;
-  var title1_number = 0;
   var fytime=0;
   var timerJd;
   var rightLines=0;   // 每题中的正确连线数
@@ -71,17 +71,9 @@ $(function () {
   $("#goFight").click(function(){
     $.getJSON("./json/title23.json", function (json) {
       json.sort(randomsort);
-      if(title1_number==json.length){
-        title1_number=0;
-      }
-      if(title.level==1){
-        getFiles("1",json);
-      }else if(title.level==2){
-        getFiles("2",json);
-      }else if(title.level==3){
-        getFiles("3",json);
-      }
+      getFiles(title.level,json);
       rechargeSite();
+
       $("#yindaoLv1,.goFightDiv").hide();
       $(".title1_main,#title3_footer,#totalPointsDiv,#levelDiv").show();
     });
@@ -93,47 +85,30 @@ $(function () {
   //重做按钮
   $("#redo").click(function () {
     rechargeSite();
-    tongze7(title,3,rightLines);
+    tongze7(title,3);
   });
 
   //下一题按钮
   $("#next").click(function () {
     title.reactTime=title.fyTime-fytime;
-    HSfunction(title);
-    $("#totalPoints").html(title.totalPoints);
     api.savaQuestionFunction(title);
     title.answer=[];
-    if(title.lianxuRightNumber==10&&title.level==1){
-      title.level=2;
-      title.lianxuRightNumber=0;
-    }else if(title.lianxuRightNumber==10&&title.level==2){
-      title.level=3;
-      title.lianxuRightNumber=0;
+    // 连续正确数目大于3说明升级了，连续正确的数目要清零。错误数也一样
+    if (title.level < title.bestLevel) {
+      if(title.lianxuRightNumber >= 3){
+        title.lianxuRightNumber=0;
+      }
+      if(title.lianxuErrorNumber >= 3){
+        title.lianxuRightNumber=0;
+      }
     }
 
-    if(title.lianxuErrorNumber==10&&title.level==3){
-      title.level=2;
-      title.lianxuErrorNumber=0;
-    }else if(title.lianxuErrorNumber==10&&title.level==2){
-      title.level=1;
-      title.lianxuErrorNumber=0;
-    }
-    if(title.L==2){
-      errorFunction(title);
-    }
-    countFunction(title,fytime);
     $("#now_level").html(title.level);
-
-    if(title.lianxuRightNumber==6&&title.level==4){
-      //alert("达到解锁标准")
-      title.unlock=true;
-    }else if(title.lianxuRightNumber==10&&title.level==4){
-      //alert("达到健康标准")
-      title.health=true;
-    }
+    // 计算当前阶段的得分情况
+    countFunction(title,fytime);
 
     // 判断训练是否结束
-    if(title.gameOver==true){
+    if(title.gameOver){
       $("#game_over").show();
       $("#todayPoints").html(title.todayPoints);
       $("#yesterdayPoints").html(title.yesterdayPoints);
@@ -142,29 +117,15 @@ $(function () {
       $("#rightDate").html(title.rightDate);
       api.savaTaskFuction(title);
     } else {
-      title1_number++;
+      title.totalNumber ++;
       $.getJSON("json/title23.json", function (json) {
         json.sort(randomsort);
-        if(title1_number==json.length){
-          title1_number=0;
-        }
-        if(title.level==1){
-          getFiles("1",json);
-        }else if(title.level==2){
-          getFiles("2",json);
-        }else if(title.level==3){
-          getFiles("3",json);
-        }
+        getFiles(title.level,json);
         rechargeSite();
       });
     }
   });
 
-  function errorFunction(title){
-    title.errorTitle.name=title.titles.name;
-    title.errorTitle.pic=title.titles.pic;
-    title.errorTitle.level=title.titles.level;
-  }
   // 解冻'下一题'按钮
   function showNext(){
     $("#nextZhezhao").hide();
@@ -173,7 +134,7 @@ $(function () {
 
   //重新生成页面
   function rechargeSite(){
-    $("#now_level").html(title.level);
+    //$("#now_level").html(title.level);
     $("#jindutiao,#jindutiao_div").css("width",$("#h1_div").text().length*title.h1_size);
 
     // 清空页面中的原有内容
@@ -185,7 +146,7 @@ $(function () {
     title.startAxes = [];
     title.endAxes   = [];
     title.axesNum   = -1;
-    rightLines      = 0;
+
     // 重新获取内容，随机显示
     title.titles.file.sort(randomsort);
     var arrW = [];
@@ -208,7 +169,6 @@ $(function () {
       timerr1=jindutiaoFunction(title.fyTime,title.h1_size,function amd(){
         showNext();
         if(title.flag==true){
-          tongze7(title,1,rightLines);
           title.L=2;
           title.reactTime=title.fyTime-fytime;
         }
@@ -363,7 +323,7 @@ $(function () {
       }
       // 根据索引值，在json数组中查找对应的值
       text = $("#word" + textNum).text();
-      src  = $("#pic"+srcNum).attr("src");
+      src  = $("#pic" + srcNum).attr("src");
       for (var j=0; j<subNum; j++) {
         if (title.titles.file[j].word == text) {
           if (src.indexOf(title.titles.file[j].pic) != -1) {
@@ -382,14 +342,24 @@ $(function () {
     // 如果样式重置完毕，则添加按钮
     if (rightLines == subNum) {
       $("#right_pic").show();
-      tongze7(title,1,rightLines);
+      // 标识为真时计分，标识为假说明是重做的，不计分
+      if (title.flag) {
+        tongze7(title,1,rightLines);
+      } else {
+        tongze7(title,3);
+      }
     } else {
       $("#error_pic").show();
-      tongze7(title,2,rightLines);
+      if(title.flag) {
+        tongze7(title,2,rightLines);
+      } else {
+        tongze7(title,3);
+      }
     }
+    $("#totalPoints").html(title.totalPoints);
     showNext();
 
-    console.log("正确的项目数："+rightLines);
+    console.log("项目标识："+title.flag);
   }
 
   // 获取点击图片的事件
@@ -410,7 +380,6 @@ $(function () {
     $('#' + $id).addClass('divBorder');
     
     var idFlag = 0;
-    var axesNum = 0;
     // 查找坐标是否存在
     for (var i=0; i<title.endAxes.length; i++) {
       if (title.endAxes[i].index == index) {
