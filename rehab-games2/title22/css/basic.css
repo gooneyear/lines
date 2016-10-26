@@ -1,0 +1,65 @@
+body,div,p,h1,h2,h3,h4,h5,h6,select,table,img,i,ul,li,tr,td,th,form,input,section{margin: 0;padding: 0}
+body{font-family: 微软雅黑;font-size: 14px;}
+h1,h2,h3,h4,h5,h6{font-weight: normal}
+a{text-decoration: none}
+li{list-style: none}
+img{font-size: 0}
+img,input{border:none;}
+.float_left{float: left}
+.float_right{float: right}
+.clear{clear: both}
+body,html{width: 100%}
+body{margin: 0;position: relative;background: #d1d6e1}
+button{cursor: pointer}
+
+/*公样式*/
+.totalPoints,.level{width: 100px;background: #b7bbc6;position: fixed;right: 15px;top:15px;text-align: left;padding-left: 5px;line-height: 40px;border-radius: 5px;color: #57585d;font-size: 18px;}
+.level{right: 127px;width: 127px}
+.h1_div{text-align: center;width: 100%;padding-top: 50px}
+.h1{font-size: 38px;line-height: 48px;color: #57585d;display: inline-block;margin: 0 auto}
+.title1_footer{height: 110px;width: 100%;background: #525e6a;position: fixed;bottom: 0;left: 0;z-index: 999999}
+.title1_footer p{width: 100%;text-align: center;color: #d2d6e1;font-size: 16px;line-height: 42px}
+.title1_footer .footer_title{line-height: 110px;font-size: 24px;font-weight: 600}
+.title1_footer_div{width: 100%;text-align: center;color: #d2d6e1;font-size: 16px}
+.title1_footer_div span{width: 80px;height: 32px;line-height: 32px;background: #4c5662;border-radius: 16px;display: inline-block;}
+.title1_footer_div i{font-style: normal}
+.title1_main{width: 100%;background: #d2d6e1;height: 100%}
+.titleTime{position: absolute;right: 5%;top:10%;font-size: 18px;color: #d2d6e2}
+.title2Time{top:10px;right: 10px;font-size: 16px}
+.prompt{width: 120px;height: 42px;color: #d2d6e1;font-size: 16px;border: #444e58 2px solid;border-radius: 8px;background: #5e6872;margin-right: 10px}
+.rightErrorDiv a{width: 120px;height: 42px;display: inline-block;}
+.rightErrorDiv a img{height: 100%;width: 100%}
+.rightErrorDiv{position: absolute;right: 0;top: 10px;width: 270px;height: 95px;border-left: #5c6874 2px solid;padding-left: 20px}
+.rightErrorDiv p{text-align: left}
+.goFight{width: 200px;display: block;margin: 30px auto 0;cursor: pointer}
+.goFight img{width: 100%;height: 100%;cursor: pointer;}
+.goFightDiv{width: 100%;text-align: center;position: absolute}
+.rightErrorDiv1{padding-top: 35px;height: 50px;}
+.rightErrorDiv a{cursor: pointer;margin-right: 10px;}
+.nextZhezhao{width: 290px;height: 95px;position: absolute;right: 0;top: 0 ;z-index: 95}
+.game_over{width: 100%;z-index: 9999999;position: absolute;background: #fff;border-bottom: 1px solid #525e6a}
+.game_over_main{width: 75%;margin: 0 auto;}
+.banner img{width: 100%;display: block}
+.game_over_bar{height: 80px;overflow: hidden}
+.game_over_bar div{width: 20%;background:#368ee7;font-size: 28px;line-height: 80px;font-weight: 600;float: left;text-align: center;color: #fff}
+.game_over_bar div p{border: 1px solid #fff;}
+.game_over_message{height: 354px;}
+.game_over_message div{width: 20%;height: 354px;float: left;line-height: 354px;}
+.game_over_message div:nth-child(2n+1){background: #d6dbdf}
+.game_over_message div:nth-child(2n){background: #e9ecf1}
+.game_over_message p{font-size: 42px;font-weight: 600;color: #57585d;text-align: center}
+.game_over_foot{height: 60px;background: #525e6a;text-align: center;padding-top: 30px;position: fixed;left:0;bottom: 0;width: 100%}
+.game_over_foot a{display: inline-block;width: 160px;height: 46px;}
+.game_over_foot a:first-child{margin-right: 20px}
+.game_over_foot a img{width: 100%;height: 100%}
+
+@media screen and (max-width:1366px) and (min-width: 1030px) {
+    .game_over_bar div{font-size: 16px;}
+    .game_over_main{width: 65%}
+    .game_over_message{height: 280px;}
+    .game_over_message div{height: 280px;line-height:260px}
+}
+@media screen and (max-width:1030px) {
+    .game_over_bar div{font-size: 16px;}
+    .game_over_main{width: 100%}
+}
