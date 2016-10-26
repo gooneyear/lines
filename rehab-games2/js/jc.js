@@ -62,7 +62,7 @@ function timeFunction(times,divID,aa){
   },1000);
 }
 
-// 训练结果的页面展示
+// 训练结果的页面大小动态调整
 $(function () {
   if ($(window).width() <= 1025 && $(window).height() <= 658) {
     $(".game_over_main").css("width", "70%");

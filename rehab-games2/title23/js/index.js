@@ -94,7 +94,7 @@ $(function () {
     title.answer=[];
     // 连续正确数目大于3说明升级了，连续正确的数目要清零。错误数也一样
     if (title.level < title.bestLevel) {
-      if(title.lianxuRightNumber >= 3){
+      if(title.lianxuRightNumber >= 3) {
         title.lianxuRightNumber=0;
       }
       if(title.lianxuErrorNumber >= 3){
@@ -178,7 +178,6 @@ $(function () {
         console.log(title.reactTime +"========="+ title.fyTime+"***"+ leftTime);
         var getFlag1 = true; 
         var getFlag2 = true;
-        console.log(leftTime+"===========");
         if (leftTime <= 1) {
           for (var x=0; x<title.level+1; x++){     
             for (var y=0; y<getTextNumArr.length; y++){        
@@ -238,7 +237,7 @@ $(function () {
 
   // 点击文字事件
   $("#words").on('click','.clickWord',function(){
-    if ($("svg line").length == $("#images img").length) {
+    if ($("svg line").length == $("#images img").length || leftTime <= 1 ) {
       return true;
     }
     // 获取当前选中文字的坐标
@@ -288,7 +287,57 @@ $(function () {
     }
   });
 
-  
+  // 获取点击图片的事件
+  $("#images").on('click','.clickPic',function(){
+    if ($("svg line").length == $("#images img").length  || leftTime <= 1){
+      return true;
+    }
+    // 获取当前选中图片的坐标
+    var $id = $(this).attr("id");
+    var index = $id.replace(/[^0-9]/ig,"");
+    var margin = $("#images").outerWidth()-($(".clickPic").outerWidth()+20)*(title.level+1);
+    var x2val  = $(".clickPic").outerWidth()*(1/2+parseInt(index)) + margin/2 + 10*(parseInt(index)*2+1);
+    var axes = {
+      "x2": x2val,
+      "y2": 100,
+      "index": index
+    };
+    $('#' + $id).addClass('divBorder');
+    
+    var idFlag = 0;
+    // 查找坐标是否存在
+    for (var i=0; i<title.endAxes.length; i++) {
+      if (title.endAxes[i].index == index) {
+        idFlag = 1;
+        break;
+      }
+    }
+    // 如果坐标已存在，不让点击
+    if (idFlag != 0) {
+      return true;
+    } else {
+      // 如果坐标不存在直接插入
+      if (title.endAxes.length > title.startAxes.length){
+        $("#pic"+title.endAxes[title.endAxes.length-1].index).removeClass('divBorder');
+        title.endAxes.pop();
+        title.endAxes.push(axes);
+      } else {
+        title.endAxes.push(axes);
+      }
+      if (title.startAxes.length == title.endAxes.length) {
+        title.axesNum += 1;
+      }
+    }
+    // 如果坐标非空，且两边坐标数相等，则连线
+    var svg = document.getElementById("svgArea");
+    if (title.endAxes.length != 0 && title.startAxes.length == title.endAxes.length) {
+      svg.innerHTML += "<line x1='" + title.startAxes[title.axesNum].x1 + "' y1='" + title.startAxes[title.axesNum].y1 + "' x2='" + title.endAxes[title.axesNum].x2 + "' y2='" + title.endAxes[title.axesNum].y2 + "' id='line"+title.axesNum+"' style='stroke:black;stroke-width:2'/>";
+    }
+    if ($("line").length == title.level+1) {
+      judgeResult();
+    }    
+  });
+
   // 判断连线是否正确
   function judgeResult(){
     var subNum = title.titles.file.length;
@@ -362,11 +411,13 @@ $(function () {
             $("#word"+textNum+",#pic"+srcNum).addClass("rightStyle");
             rightLines += 1;
             clearInterval(timerJd);
+            $("#right_audio")[0].play();
           } else {
             $("#line"+i).attr("style","stroke:red;stroke-width:3");
             $("#word"+textNum+",#pic"+srcNum).removeClass("divBorder");
             $("#word"+textNum+",#pic"+srcNum).addClass("errorStyle");
             clearInterval(timerJd);
+            $("#error_audio")[0].play();
           }
         }
       }
@@ -393,62 +444,7 @@ $(function () {
 
     $("#totalPoints").html(title.totalPoints);
     showNext();
-
-    console.log("项目标识："+title.flag);
-
   }
-
-  // 获取点击图片的事件
-  $("#images").on('click','.clickPic',function(){
-    if ($("svg line").length == $("#images img").length){
-      return true;
-    }
-    // 获取当前选中图片的坐标
-    var $id = $(this).attr("id");
-    var index = $id.replace(/[^0-9]/ig,"");
-    var margin = $("#images").outerWidth()-($(".clickPic").outerWidth()+20)*(title.level+1);
-    var x2val  = $(".clickPic").outerWidth()*(1/2+parseInt(index)) + margin/2 + 10*(parseInt(index)*2+1);
-    var axes = {
-      "x2": x2val,
-      "y2": 100,
-      "index": index
-    };
-    $('#' + $id).addClass('divBorder');
-    
-    var idFlag = 0;
-    // 查找坐标是否存在
-    for (var i=0; i<title.endAxes.length; i++) {
-      if (title.endAxes[i].index == index) {
-        idFlag = 1;
-        break;
-      }
-    }
-    // 如果坐标已存在
-    if (idFlag != 0) {
-      return true;
-    } else {
-      // 如果坐标不存在直接插入
-      if (title.endAxes.length > title.startAxes.length){
-        $("#pic"+title.endAxes[title.endAxes.length-1].index).removeClass('divBorder');
-        title.endAxes.pop();
-        title.endAxes.push(axes);
-      } else {
-        title.endAxes.push(axes);
-      }
-      if (title.startAxes.length == title.endAxes.length) {
-        title.axesNum += 1;
-      }
-    }
-
-    var svg = document.getElementById("svgArea");
-    if (title.endAxes.length != 0 && title.startAxes.length == title.endAxes.length) {
-      svg.innerHTML += "<line x1='" + title.startAxes[title.axesNum].x1 + "' y1='" + title.startAxes[title.axesNum].y1 + "' x2='" + title.endAxes[title.axesNum].x2 + "' y2='" + title.endAxes[title.axesNum].y2 + "' id='line"+title.axesNum+"' style='stroke:black;stroke-width:2'/>";
-    }
-    if ($("line").length == title.level+1) {
-      judgeResult();
-    }    
-  });
-
 
   //任务进度条
   function jindutiaoFunction(times,nums,aa){
@@ -471,5 +467,4 @@ $(function () {
       leftTime=times;
     },1000);
   }
-
 });
