@@ -17,7 +17,7 @@ $(function () {
     missNum:0,
     startLevel:1,
     avgCorrectTime:0,   // 正确答题平均时长
-    time:"300",         //
+    time:"300",         // 当前任务总时长（S）
     reactTime:0,        // 用户反应时长
     answer:[],          // ??????有用保留
     specs:{

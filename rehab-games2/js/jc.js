@@ -76,6 +76,27 @@ function randomsort(a, b) {
   //用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1
 }
 
+function HSfunction(title){
+  if(title.L==1){
+    title.isCorrect="1";
+    title.specs.help_score=4;
+    if(title.lianxuwutishiNumber>=3){
+      title.specs.award_score=5;
+      title.specs.award_reason="连续正确次数>=3";
+    }else {
+      title.specs.award_score=0;
+      title.specs.award_reason="连续正确次数<3";
+    }
+    title.score=title.specs.help_score+title.specs.award_score+10+(title.level-1)*10;
+  }else {
+    title.specs.award_score=0;
+    title.specs.help_score=0;
+    title.specs.award_reason="连续正确次数<3";
+    title.isCorrect="0";
+    title.score=0;
+  }
+}
+
 //通则7
 function tongze7(title,tF,rightLines){
   //tF 1:正确、2:错误、3:重做;MM:正确或者错误情况下重做
@@ -105,6 +126,31 @@ function tongze7(title,tF,rightLines){
       }
     }
   } else if (tF==3){
+    title.flag=false;
+  }
+}
+
+//通则4
+function tongze4(title,tF,level){
+  //tF 1:正确、2:错误、3:重做;MM:正确或者错误情况下重做
+  if(tF==1){
+    title.lianxuwutishiNumber++;
+    title.lianxuErrorNumber=0;
+    if(title.lianxuwutishiNumber>=3){
+      title.totalPoints+=15;
+    }else {
+      title.totalPoints+=10;
+    }
+    //辅助分
+    title.totalPoints+=4;
+    //级别分
+    if(level>1){
+      title.totalPoints+=(level-1)*10;
+    }
+  }else if(tF==2) {
+    title.lianxuErrorNumber++;
+    title.lianxuwutishiNumber=0;
+  }else if(tF==3){
     title.flag=false;
   }
 }
