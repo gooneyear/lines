@@ -75,8 +75,6 @@ $(function () {
 
   api.loginFunction(title,function(){});
   $("#jindutiao,#jindutiao_div").css("width",$("#h1_div").text().length*title.h1_size);
-  var timerr;
-  var title1_number = 0;
   var fytime=0;
   var timerJd;
   var random1=0;
@@ -95,7 +93,6 @@ $(function () {
     data:""
   };
   var flag=true;
-  var first=0;
 
   //初始化界面；
   $("#goFight").click(function(){
@@ -249,6 +246,9 @@ $(function () {
   }
   //点击填放图片
   $(".classBox").click(function(){
+    if(fytime < 1){
+      return true;
+    }
     if(picObj.src!=""){
       $(this).append("<img src="+picObj.src+" data="+picObj.data+">");
       if($(this).find("p").attr("data")==""&&$(this).siblings(".Class p").attr("data")!=picObj.data){
@@ -403,31 +403,32 @@ $(function () {
     $("#error_pic,#right_pic,#redo_pic").hide();
     if(title.level==1){
       suijipaibu(title);
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array1[0].split("g")[0]+"g"+" data="+array1[0].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array1[1].split("g")[0]+"g"+" data="+array1[1].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array1[2].split("g")[0]+"g"+" data="+array1[2].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array1[3].split("g")[0]+"g"+" data="+array1[3].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array1[0].split("g")[0]+"g"+" data="+array1[0].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array1[1].split("g")[0]+"g"+" data="+array1[1].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array1[2].split("g")[0]+"g"+" data="+array1[2].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array1[3].split("g")[0]+"g"+" data="+array1[3].split("g")[1]+">");
     }else if(title.level==2){
       suijipaibu(title);
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array2[0].split("g")[0]+"g"+" data="+array2[0].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array2[1].split("g")[0]+"g"+" data="+array2[1].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array2[2].split("g")[0]+"g"+" data="+array2[2].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array2[3].split("g")[0]+"g"+" data="+array2[3].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array2[4].split("g")[0]+"g"+" data="+array2[4].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array2[5].split("g")[0]+"g"+" data="+array2[5].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array2[0].split("g")[0]+"g"+" data="+array2[0].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array2[1].split("g")[0]+"g"+" data="+array2[1].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array2[2].split("g")[0]+"g"+" data="+array2[2].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array2[3].split("g")[0]+"g"+" data="+array2[3].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array2[4].split("g")[0]+"g"+" data="+array2[4].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array2[5].split("g")[0]+"g"+" data="+array2[5].split("g")[1]+">");
       $(".classBox").css("height","411px");
     }else if(title.level==3){
       suijipaibu(title);
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array3[0].split("g")[0]+"g"+" data="+array3[0].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array3[1].split("g")[0]+"g"+" data="+array3[1].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array3[2].split("g")[0]+"g"+" data="+array3[2].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array3[3].split("g")[0]+"g"+" data="+array3[3].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array3[4].split("g")[0]+"g"+" data="+array3[4].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array3[5].split("g")[0]+"g"+" data="+array3[5].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array3[6].split("g")[0]+"g"+" data="+array3[6].split("g")[1]+">");
-      $(".main_left").append("<img  data1=' ' src="+"images/"+array3[7].split("g")[0]+"g"+" data="+array3[7].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array3[0].split("g")[0]+"g"+" data="+array3[0].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array3[1].split("g")[0]+"g"+" data="+array3[1].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array3[2].split("g")[0]+"g"+" data="+array3[2].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array3[3].split("g")[0]+"g"+" data="+array3[3].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array3[4].split("g")[0]+"g"+" data="+array3[4].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array3[5].split("g")[0]+"g"+" data="+array3[5].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array3[6].split("g")[0]+"g"+" data="+array3[6].split("g")[1]+">");
+      $(".main_left").append("<img tabindex='0' data1=' ' src="+"images/"+array3[7].split("g")[0]+"g"+" data="+array3[7].split("g")[1]+">");
       $(".classBox").css("height","548px");
     }
+    $(".main_left img").addClass("imgShow");
     title.flag=true;
     flag=true;
     c=0;
@@ -465,11 +466,15 @@ $(function () {
       }
     });
     //点击图片选择
-    $(".main_left>img").click(function(){
+    $(".main_left>img").focus(function(){
       $(this).attr("data1","1");
       picObj.src=$(this).attr("src");
       picObj.data=$(this).attr("data");
+      $(this).addClass("imgCheck");
     });
+    $(".main_left>img").blur(function(){
+      $(this).removeClass("imgCheck");
+    })
   }
 
   // 随机排序函数
@@ -540,7 +545,7 @@ function tongze4Self(title,tF,level){
         title.startLevel = title.level;
       }
       title.totalPoints+=15;
-    }else {
+    } else {
       title.totalPoints+=10;
     }
     //辅助分
