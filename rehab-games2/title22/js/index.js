@@ -34,7 +34,7 @@ $(function () {
     flag:true,
     matters:[],
     h1_size:parseInt($(".h1").css("font-size")),
-    lianxuwutishiNumber:0,
+    lianxuRightNumber:0,
     lianxuErrorNumber:0,
     time1:0,
     trueOfFalse:"",
@@ -248,7 +248,7 @@ $(function () {
     randomFunction();
   }
   //点击填放图片
-  $(".class1,.class2").click(function(){
+  $(".classBox").click(function(){
     if(picObj.src!=""){
       $(this).append("<img src="+picObj.src+" data="+picObj.data+">");
       if($(this).find("p").attr("data")==""&&$(this).siblings(".Class p").attr("data")!=picObj.data){
@@ -276,7 +276,7 @@ $(function () {
   //点击提交按钮时
   $("#submitBtn").click(function(){
     clearInterval(timerJd);
-    $(".class1>img,.class2>img").each(function(){
+    $(".classBox>img").each(function(){
       c++;
       if(c==1){
         a=$(this).attr("data");
@@ -302,33 +302,34 @@ $(function () {
     $("#submitBtn,#nextZhezhao").hide();
     $("#redo_pic").show();
     if(flag==true){
-        if(title.flag==true){
-            title.L=1;
-            tongze4(1,title.level);
-            title.reactTime=title.fyTime-fytime;
-        }
-        $("#right_audio").attr("src","audio/right.mp3");
-        $("#right_audio")[0].play();
-        $("#right_pic").show();
-        $("#error_pic").hide();
+      if(title.flag==true){
+        title.L=1;
+        tongze4Self(title,1,title.level);
+        title.reactTime=title.fyTime-fytime;
+      }
+      $("#right_audio").attr("src","audio/right.mp3");
+      $("#right_audio")[0].play();
+      $("#right_pic").show();
+      $("#error_pic").hide();
     }else {
-        if(title.flag==true){
-            title.L=2;
-            tongze4(2);
-            title.reactTime=title.fyTime-fytime;
-        }
-        $("#error_audio").attr("src","audio/wrong.mp3");
-        $("#error_audio")[0].play();
-        $("#right_pic").hide();
-        $("#error_pic").show();
+      if(title.flag==true){
+        title.L=2;
+        tongze4Self(title,2);
+        title.reactTime=title.fyTime-fytime;
+      }
+      $("#error_audio").attr("src","audio/wrong.mp3");
+      $("#error_audio")[0].play();
+      $("#right_pic").hide();
+      $("#error_pic").show();
     }
   });
 
   //重做按钮
   $("#redo").click(function () {
     rechargeSite();
-    tongze4(3);
+    tongze4Self(title,3);
   });
+
   var bb="";
   //下一题按钮
   $("#next").click(function () {
@@ -340,27 +341,22 @@ $(function () {
     }
     countFunction(title,fytime);
     $("#totalPoints").html(title.totalPoints);
-    if(title.level==1&&title.lianxuwutishiNumber==3){
-      title.level=2;
-      title.lianxuwutishiNumber=0;
-    }else  if(title.level==2&&title.lianxuwutishiNumber==3) {
-      title.level = 3;
-      title.lianxuwutishiNumber = 0;
+    // 连续正确数目等于3说明升级了，连续正确的数目要清零。错误数也一样
+    if (title.level < title.bestLevel) {
+      if(title.lianxuRightNumber >= 3) {
+        title.lianxuRightNumber=0;
+      }
+      if(title.lianxuErrorNumber >= 3){
+        title.lianxuRightNumber=0;
+      }
+    } else {
+      if (title.lianxuRightNumber == 3){
+        title.health=true;
+      } else if (title.lianxuRightNumber == 2){
+        title.unlock = true;
+      }
     }
-    if(title.lianxuErrorNumber==3&&title.level==2){
-      title.level=1;
-      title.lianxuErrorNumber=0;
-    }else if(title.lianxuErrorNumber==3&&title.level==3){
-      title.level=2;
-      title.lianxuErrorNumber=0;
-    }
-    if(title.lianxuwutishiNumber==2&&title.level==3){
-      //alert("达到解锁标准")
-      title.unlock=true;
-    }else if(title.lianxuwutishiNumber==3&&title.level==3){
-      //alert("达到健康标准")
-      title.health=true;
-    }
+
     if(title.gameOver==true){
       $("#game_over").show();
       $("#todayPoints").html(title.todayPoints);
@@ -392,15 +388,16 @@ $(function () {
 
   //重置页面
   function rechargeSite(){
-    $(".class1>img,.class2>img").each(function(){
+    $(".classBox>img").each(function(){
       $(this).css("border","3px solid #78839b");
       $(this).css("border-bottom","6px solid #78839b");
     });
     $("#now_level").html(title.level);
     $("#jindutiao,#jindutiao_div").css("width",$("#h1_div").text().length*title.h1_size);
-    $(".class1 p,.class2 p").attr("data","");
-    $(".class1>img,.class2>img,.main_left>img").remove();
+    $(".classBox p").attr("data","");
+    $(".classBox>img,.main_left>img").remove();
     $("#submitBtn").removeClass("button");
+    $("#submitBtn").attr("disabled","disabled");
     $("#submitBtn,#nextZhezhao").show();
     $("#error_pic,#right_pic,#redo_pic").hide();
     if(title.level==1){
@@ -417,6 +414,7 @@ $(function () {
       $(".main_left").append("<img  data1=' ' src="+"images/"+array2[3].split("g")[0]+"g"+" data="+array2[3].split("g")[1]+">");
       $(".main_left").append("<img  data1=' ' src="+"images/"+array2[4].split("g")[0]+"g"+" data="+array2[4].split("g")[1]+">");
       $(".main_left").append("<img  data1=' ' src="+"images/"+array2[5].split("g")[0]+"g"+" data="+array2[5].split("g")[1]+">");
+      $(".classBox").css("height","411px");
     }else if(title.level==3){
       suijipaibu(title);
       $(".main_left").append("<img  data1=' ' src="+"images/"+array3[0].split("g")[0]+"g"+" data="+array3[0].split("g")[1]+">");
@@ -427,6 +425,7 @@ $(function () {
       $(".main_left").append("<img  data1=' ' src="+"images/"+array3[5].split("g")[0]+"g"+" data="+array3[5].split("g")[1]+">");
       $(".main_left").append("<img  data1=' ' src="+"images/"+array3[6].split("g")[0]+"g"+" data="+array3[6].split("g")[1]+">");
       $(".main_left").append("<img  data1=' ' src="+"images/"+array3[7].split("g")[0]+"g"+" data="+array3[7].split("g")[1]+">");
+      $(".classBox").css("height","548px");
     }
     title.flag=true;
     flag=true;
@@ -454,7 +453,7 @@ $(function () {
       $("#redo_pic").show();
       if(title.flag==true){
         title.L=2;
-        tongze4(2);
+        tongze4Self(title,2);
         if(title.level==1){
           title.reactTime=20;
         }else if(title.level==2){
@@ -527,3 +526,36 @@ $(function () {
     },1000);
   }
 });
+
+//通则4
+function tongze4Self(title,tF,level){
+  //tF 1:正确、2:错误、3:重做;MM:正确或者错误情况下重做
+  if(tF==1){
+    title.lianxuRightNumber++;
+    title.lianxuErrorNumber=0;
+    if(title.lianxuRightNumber>=3){
+      if (title.level < title.bestLevel) {
+        title.level ++;
+        title.startLevel = title.level;
+      }
+      title.totalPoints+=15;
+    }else {
+      title.totalPoints+=10;
+    }
+    //辅助分
+    title.totalPoints+=4;
+    //级别分
+    if(level>1){
+      title.totalPoints+=(level-1)*10;
+    }
+  }else if(tF==2) {
+    title.lianxuErrorNumber++;
+    title.lianxuRightNumber=0;
+    if (title.level > 1) {
+      title.level --;
+      title.startLevel = title.level;
+    }
+  }else if(tF==3){
+    title.flag=false;
+  }
+}

@@ -129,28 +129,3 @@ function tongze7(title,tF,rightLines){
     title.flag=false;
   }
 }
-
-//通则4
-function tongze4(title,tF,level){
-  //tF 1:正确、2:错误、3:重做;MM:正确或者错误情况下重做
-  if(tF==1){
-    title.lianxuwutishiNumber++;
-    title.lianxuErrorNumber=0;
-    if(title.lianxuwutishiNumber>=3){
-      title.totalPoints+=15;
-    }else {
-      title.totalPoints+=10;
-    }
-    //辅助分
-    title.totalPoints+=4;
-    //级别分
-    if(level>1){
-      title.totalPoints+=(level-1)*10;
-    }
-  }else if(tF==2) {
-    title.lianxuErrorNumber++;
-    title.lianxuwutishiNumber=0;
-  }else if(tF==3){
-    title.flag=false;
-  }
-}
