@@ -26,8 +26,8 @@
 }
 @media screen and (max-width:1024px) {
     .title_main{width: 80%}
-    .class1{margin-right: 2%}
+    .classBox1{margin-right: 2%}
     .yindaoLv1>div>div:last-child{width: 83%}
-    .class1 img, .class2 img{border: 2px solid #78839b;border-bottom: 4px solid #78839b;}
+    .classBox img{border: 2px solid #78839b;border-bottom: 4px solid #78839b;}
     .yindaoLv1 img{padding-top: 15px;padding-left: 7px}
 }

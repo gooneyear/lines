@@ -364,6 +364,7 @@ $(function () {
       $("#meanFyTime").html(title.meanFyTime);
       $("#rightTotal").html(title.rightNumber+"/"+title.totalNumber);
       $("#rightDate").html(title.rightDate);
+      $(".classBox").hidden();
       api.savaTaskFuction(title);
     }else{
       $.getJSON("json/title22.json", function (json) {
@@ -551,7 +552,7 @@ function tongze4Self(title,tF,level){
   }else if(tF==2) {
     title.lianxuErrorNumber++;
     title.lianxuRightNumber=0;
-    if (title.level > 1) {
+    if (title.level > 1 && title.lianxuErrorNumber>=3) {
       title.level --;
       title.startLevel = title.level;
     }
