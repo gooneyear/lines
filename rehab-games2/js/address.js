@@ -2,10 +2,9 @@
  * Created by Administrator on 2016/9/12.
  */
 var api={
-    login:"http://rehab-games.66nao.dev/api/Auth/login",
-    init:"http://rehab-games.66nao.dev/api/Train/init",
-    saveQuestion:"http://rehab-games.66nao.dev/api/Train/saveQuestion",
-    saveTask:"http://rehab-games.66nao.dev/api/train/saveTask",
+    init:"http://192.168.10.124:8096/api/Train/init",
+    saveQuestion:"http://192.168.10.124:8096/api/Train/saveQuestion",
+    saveTask:"http://192.168.10.124:8096/api/train/saveTask",
     getPara: function(paraName) {
         var surl = location.href;
         var reg = "(?:\\?|&){1}"+paraName+"=([^&]*)";
@@ -41,8 +40,8 @@ var api={
             }
         });
     },
+  //保存任务相关信息接口
     savaTaskFuction:function(title){
-        //保存任务相关信息接口
         $.ajax({
             type: "post",
             url: api.saveTask,
@@ -64,20 +63,20 @@ var api={
             }
         });
     },
+  //保存每一题相关信息
     savaQuestionFunction:function(title){
-        //保存每一题相关信息
         $.ajax({
-            type: "post",//数据发送的方式（post 或者 get）
-            url: api.saveQuestion,//要发送的后台地址
-            data: {'trainId':api.getPara("trainId"),'taskId':api.getPara("taskId"),"detailCode":title.detailCode,"questionContent":title.questionContent,"reactTime":title.reactTime,"answer":title.answer,"specs":title.specs,"isCorrect":title.isCorrect,"score":title.score,"access_token":api.getPara("token")},//要发送的数据（参数）格式为{'val1':"1","val2":"2"}
-            dataType: "json",//后台处理后返回的数据格式
-            success: function (data) {//ajax请求成功后触发的方法
+            type: "post",
+            url: api.saveQuestion,
+            data: {'trainId':api.getPara("trainId"),'taskId':api.getPara("taskId"),"detailCode":title.detailCode,"questionContent":title.questionContent,"reactTime":title.reactTime,"answer":title.answer,"specs":title.specs,"isCorrect":title.isCorrect,"score":title.score,"access_token":api.getPara("token")},//Ҫ���͵����ݣ���������ʽΪ{'val1':"1","val2":"2"}
+            dataType: "json",
+            success: function (data) {
                 if(data){
                     console.log(data);
                 }
             },
-            error: function (msg) {//ajax请求失败后触发的方法
-                console.log(msg);//弹出错误信息
+            error: function (msg) {
+                console.log(msg);
             }
         });
     }

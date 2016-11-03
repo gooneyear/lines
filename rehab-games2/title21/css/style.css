@@ -1,0 +1,80 @@
+/*题目4*/
+.yindaoLv1{padding-bottom: 0}
+.title4_text{text-align: center;height: 620px;padding-top: 100px;}
+.title4_text>span{width: 29%;height: 350px;display: inline-block;background: #fff;color: #57585e;font-size: 100px;font-weight: 900;
+    line-height: 350px;text-align:center;border: 6px solid #bebfc1;border-radius: 8px;
+    position: relative;
+}
+.title4>span{margin-right: 5%}
+.yindaoLv1>div>div:last-child{width: 80%}
+.title4_Text{width: 100%}
+.title4_Text>span{width: 380px;height: 300px;background: #fff;color: #57585e;font-size: 100px;font-weight: 900;
+    line-height: 300px;text-align:center;border: 4px solid #bebfc1;border-radius: 8px;display: inline-block;float: left;}
+#title4_text2{margin-left: 5%}
+.title4_Text1{font-size: 32px;color: #57585e;}
+.title4_Text1 strong{color: #0079e1}
+
+.zh,.zhezhao{position: absolute;bottom: 0;left: 0;width: 100%;height: 100px;background: #57585e;opacity: 0.8;z-index: 9996}
+.au,.audioBtn_div{position: absolute;bottom: 0;left: 0;width: 100%;height: 223px;z-index: 9997}
+.au img,.audioBtn_div img{width: 80px;height: 80px;cursor: pointer;z-index: 9999}
+.goFight{width: 200px;display: block;margin: 30px auto 0;cursor: pointer}
+.goFight img{width: 100%;height: 100%;cursor: pointer;}
+.goFightDiv{width: 100%;text-align: center;position: absolute}
+.two-phase_div{display: inline-block}
+.two-phase_div p{font-size: 52px;line-height: 52px;font-weight: 600;padding-bottom: 50px;color: #d1d6e1}
+.two-phase_div div{width: 70%;margin: 0 auto;border: 6px solid #b6bfc6}
+.two-phase_div img{width: 100%; font-size: 0;display: block;cursor: pointer;}
+.two-phase_div:first-child{margin-right: 5%}
+.rightErrorDiv1{padding-top: 35px;height: 50px;}
+.rightErrorDiv a{cursor: pointer;margin-right: 10px;}
+.three-phase_div p{width: 400px;height: 300px;line-height: 300px;font-size: 120px;text-align: center;color: #57585d;font-weight: 700}
+.three-phase_div{display: inline-block}
+.a{position: relative;border-radius: 8px;;border: 6px solid #bebfc1}
+.a1{margin-right: 50px}
+.au{height: 89px;}
+.three-phase_div p{background: #fff}
+@media screen and (max-width:1366px) and (min-width: 1025px) {
+    .yd_text{width: 600px;}
+    .title4_Text>span{width: 260px;height: 200px;line-height: 200px;}
+    .title4_Text1{font-size: 18px;}
+
+    .title4_text{height: 370px;padding-top: 60px;}
+    .audioBtn_div{bottom: -76px;}
+    .zhezhao{height: 88px;}
+    .title4_text>span{height: 220px;line-height: 220px;font-size: 80px;}
+    .two-phase_div div{width: 300px;}
+    .title1_footer{height: 100px;}
+    .h1_div{padding-top: 55px;}
+    .three-phase_div p{
+        width: 300px;height: 220px;font-size: 100px;line-height: 220px;
+    }
+    .yindaoLv1 h1{margin-top: 20px;}
+    .yindaoLv1 h2{padding-top: 20px;padding-bottom: 20px;}
+    .yindaoLv1>div{height: 330px}
+    .h1{font-size: 32px;}
+    .yindaoLv1>div>div:last-child{width: 75%}
+}
+@media screen and (max-width:1024px) {
+    .yd_text{width: 600px;}
+    .title4_Text>span{width: 260px;height: 200px;line-height: 200px;}
+    .title4_Text1{font-size: 18px;}
+    .yindaoLv1{height: 630px;}
+    .title4_text{height: 490px;padding-top: 60px;}
+    .audioBtn_div{bottom: -76px;}
+    .zhezhao{height: 88px;}
+    .title4_text>span{height: 220px;line-height: 220px;font-size: 80px;}
+    .two-phase_div div{width: 300px;}
+    .title1_footer{height: 100px;}
+    .h1_div{padding-top: 55px;}
+    .three-phase_div p{
+        width: 300px;height: 220px;font-size: 100px;line-height: 220px;
+    }
+    .h1{font-size: 32px;}
+}
+@media screen and (max-width:1024px) {
+    .title4_text{height: 450px}
+    .yindaoLv1>div>div:last-child{width: 80%}
+}
+
+
+
